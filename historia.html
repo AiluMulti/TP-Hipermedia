@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafío en el Cementerio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="contenedor">
+        <header>
+            <img id="titulo" src="img/titulo2.png" alt="Título">
+        </header>
+        <div id="vinilo-container">
+            <div id="instrucciones">Haz clic para reproducir/pausar. Haz doble clic para reiniciar.</div>
+            <img id="vinilo" src="img/vinilo1.png" onclick="toggleAudio(); showInstructions(event)" ondblclick="restartAudio()" alt="Vinilo">
+        </div>
+        <audio id="miAudio" src="audios/desafio-del-cementerio-introduccion.wav"></audio>
+        <section id="imagenAparece">
+            <!-- Aquí se mostrarán las imágenes -->
+        </section>
+    </div>
+    <script>
+        var imagenes = [
+            { src: "img/casa-tormenta.jpg", tiempo: 10 },
+            { src: "img/circulodechicas2.png", tiempo: 19 },
+            { src: "img/chica-levitando2.png", tiempo: 21 }
+        ];
+
+        var audio = document.getElementById("miAudio");
+        var imagenActual = 0;
+        var scrollPosition = window.scrollY;
+
+        function toggleAudio() {
+            var vinilo = document.getElementById("vinilo");
+            if (audio.paused) {
+                playAudio();
+                vinilo.classList.add("playing");
+            } else {
+                pauseAudio();
+            }
+        }
+
+        function playAudio() {
+            var imagenAparece = document.getElementById("imagenAparece");
+            audio.play();
+
+            audio.addEventListener("timeupdate", function (event) {
+                var tiempoActual = audio.currentTime;
+                if (imagenActual < imagenes.length && tiempoActual >= imagenes[imagenActual].tiempo) {
+                    var nuevaImagen = document.createElement("img");
+                    nuevaImagen.src = imagenes[imagenActual].src;
+                    nuevaImagen.style.width = "100%";
+                    nuevaImagen.classList.add("fade-in");
+                    imagenAparece.innerHTML = ""; // Limpiar cualquier imagen anterior
+                    imagenAparece.appendChild(nuevaImagen);
+
+                    if (imagenActual === 2) {
+                        var imagenFin = document.createElement("a");
+                        imagenFin.href = "pagina1.html";
+                        var imagenFinImg = document.createElement("img");
+                        imagenFinImg.src = "img/fin.png";
+                        imagenFinImg.style.width = "100%";
+                        imagenFin.appendChild(imagenFinImg);
+                        imagenAparece.appendChild(imagenFin);
+                    }
+
+                    if (imagenActual === 2) {
+                        nuevaImagen.onclick = function() {
+                            var nuevaImagenAbajo = document.createElement("img");
+                            nuevaImagenAbajo.src = "img/ojos.jpg";
+                            nuevaImagenAbajo.style.width = "100%";
+                            imagenAparece.appendChild(nuevaImagenAbajo);
+                        };
+                    }
+
+                    imagenActual++;
+
+                    // Restaurar la posición del scroll después de cambiar las imágenes
+                    window.scrollTo(0, scrollPosition);
+                }
+            });
+        }
+
+        function pauseAudio() {
+            audio.pause();
+        }
+
+        function restartAudio() {
+            audio.currentTime = 0;
+            var imagenAparece = document.getElementById("imagenAparece");
+            imagenAparece.innerHTML = ""; // Limpiar cualquier imagen anterior
+            imagenActual = 0;
+            playAudio();
+        }
+
+        function showInstructions(event) {
+            event.stopPropagation();
+            var instrucciones = document.getElementById("instrucciones");
+            instrucciones.style.display = "block";
+            document.addEventListener("click", hideInstructions);
+        }
+
+        function hideInstructions() {
+            var instrucciones = document.getElementById("instrucciones");
+            instrucciones.style.display = "none";
+            document.removeEventListener("click", hideInstructions);
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
