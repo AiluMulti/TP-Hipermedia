@@ -1,87 +1,118 @@
 body {
-    background-image: url("img/cementerio.jpeg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    padding: 30px;
-}
+            background-image: url("img/background.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            padding: 30px;
+        }
 
-#contenedor {
-    width: 80%;
-    max-width: 800px;
-    padding: 2em;
-    margin: 0 auto;
-    background: rgba(96, 96, 96, 0.5);
-    text-align: center;
-    position: relative;
-}
+        #contenedor {
+            max-width: 1200px;
+            padding: 2em;
+            margin: 0 auto;
+            background: rgba(96, 96, 96, 0.5);
+            text-align: center;
+            position: relative;
+        }
 
-header {
-    padding: 10px;
-}
+        header {
+            padding: 10px;
+        }
 
-#vinilo {
-    width: 100px;
-    height: 100px;
-    background-image: url('img/vinilo1.png');
-    border-radius: 50%;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    position: relative;
-    transform-origin: center center;
-}
+        #vinilo {
+            width: 100px;
+            height: 100px;
+            background-image: url('img/vinilo1.png');
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+            transform-origin: center center;
+        }
 
-#vinilo.playing {
-    transform: translateX(280px) translateY(-7px) scale(0.8);
-    transition: transform 0.5s ease;
-}
+        #vinilo.playing {
+            transform: translateX(550px) translateY(-100px) scale(0.8);
+            transition: transform 0.5s ease;
+        }
 
-#vinilo:not(.playing):hover {
-    transform: scale(1.2);
-}
+        #vinilo:not(.playing):hover {
+            transform: scale(1.2);
+        }
 
-#vinilo-container {
-    position: relative;
-    display: inline-block;
-    width: 100px;
-    height: 100px;
-    overflow: visible;
-    margin-left: auto;
-    margin-right: auto;
-}
+        #vinilo-container {
+            position: relative;
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            overflow: visible;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-#imagenAparece {
-    width: 50%;
-    padding: 20px;
-    margin: 0 auto;
-}
+        #imagenAparece {
+            width: 73%;
+            margin: 0 auto;
+            position: relative;
+            top: -90px;
+            z-index: 1;
+        }
 
-.fade-in {
-    animation: fadeInAnimation 2s ease forwards;
-}
+        .fade-in {
+            animation: fadeInAnimation 2s ease forwards;
+        }
 
-@keyframes fadeInAnimation {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
+        @keyframes fadeInAnimation {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
 
-#instrucciones {
-    display: none;
+        #instrucciones {
+            display: none;
+            position: absolute;
+            left: 380px;
+            top: 50%;
+            transform: translateY(-170%);
+            background-color: rgba(108, 108, 108, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            font-family: monospace;
+        }
+
+        #titulo {
+            transition: opacity 1s ease-out;
+        }
+
+        #titulo.fade-out {
+            opacity: 0;
+ }
+
+.titulo2 {
     position: absolute;
-    left: 150px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(108, 108, 108, 0.8);
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    z-index: 1;
-    font-family: monospace;
+    right: 80px;
+    top: 280px; 
 }
+
+#boton{
+    position: absolute;
+    right: 275px;
+    top: 350px;
+}
+
+.rayo {
+            position: absolute;
+            display: none;
+            z-index: 10;
+            width: 15%;
+        }
+
+
+
 
 
 

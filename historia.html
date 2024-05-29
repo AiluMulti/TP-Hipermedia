@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
     <title>Desafío en el Cementerio</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="contenedor">
@@ -16,70 +16,85 @@
             <img id="vinilo" src="img/vinilo1.png" onclick="toggleAudio(); showInstructions(event)" ondblclick="restartAudio()" alt="Vinilo">
         </div>
         <audio id="miAudio" src="audios/desafio-del-cementerio-introduccion.wav"></audio>
+        <audio id="rayoAudio" src="audios/trueno.wav"></audio>
+        <audio id="risaAudio" src="audios/risa.wav"></audio>
+        <audio id="gritosAudio" src="audios/gritos.wav"></audio>
         <section id="imagenAparece">
-            <!-- Aquí se mostrarán las imágenes -->
+
         </section>
+
+        <img id="rayo" class="rayo" src="img/rayo.png" alt="Rayo">
     </div>
     <script>
         var imagenes = [
-            { src: "img/casa-tormenta.jpg", tiempo: 10 },
-            { src: "img/circulodechicas2.png", tiempo: 19 },
-            { src: "img/chica-levitando2.png", tiempo: 21 }
+            { src: "img/background.png", tiempo: 9 },
+            { src: "img/chicas-historias9.png", tiempo: 19 },
+            { src: "img/caminandoporelcementerio2.png", tiempo: 60 },
+            { src: "img/levitando.jpeg", tiempo: 82 },
+            { src: "img/chicasgritando.jpeg", tiempo: 113}
         ];
 
         var audio = document.getElementById("miAudio");
+        var vinilo = document.getElementById("vinilo");
         var imagenActual = 0;
-        var scrollPosition = window.scrollY;
+        var scrollPos = 0;
 
         function toggleAudio() {
-            var vinilo = document.getElementById("vinilo");
+            var titulo = document.getElementById("titulo");
+
             if (audio.paused) {
                 playAudio();
                 vinilo.classList.add("playing");
+                titulo.classList.add("fade-out");
             } else {
                 pauseAudio();
             }
         }
 
         function playAudio() {
-            var imagenAparece = document.getElementById("imagenAparece");
             audio.play();
+            audio.addEventListener("timeupdate", mostrarImagen);
+        }
 
-            audio.addEventListener("timeupdate", function (event) {
-                var tiempoActual = audio.currentTime;
-                if (imagenActual < imagenes.length && tiempoActual >= imagenes[imagenActual].tiempo) {
-                    var nuevaImagen = document.createElement("img");
-                    nuevaImagen.src = imagenes[imagenActual].src;
-                    nuevaImagen.style.width = "100%";
-                    nuevaImagen.classList.add("fade-in");
-                    imagenAparece.innerHTML = ""; // Limpiar cualquier imagen anterior
-                    imagenAparece.appendChild(nuevaImagen);
+        function mostrarImagen(event) {
+            var tiempoActual = audio.currentTime;
+            if (imagenActual < imagenes.length && tiempoActual >= imagenes[imagenActual].tiempo) {
+                var imagenAparece = document.getElementById("imagenAparece");
 
-                    if (imagenActual === 2) {
-                        var imagenFin = document.createElement("a");
-                        imagenFin.href = "pagina1.html";
-                        var imagenFinImg = document.createElement("img");
-                        imagenFinImg.src = "img/fin.png";
-                        imagenFinImg.style.width = "100%";
-                        imagenFin.appendChild(imagenFinImg);
-                        imagenAparece.appendChild(imagenFin);
-                    }
 
-                    if (imagenActual === 2) {
-                        nuevaImagen.onclick = function() {
-                            var nuevaImagenAbajo = document.createElement("img");
-                            nuevaImagenAbajo.src = "img/ojos.jpg";
-                            nuevaImagenAbajo.style.width = "100%";
-                            imagenAparece.appendChild(nuevaImagenAbajo);
-                        };
-                    }
+                scrollPos = window.scrollY || document.documentElement.scrollTop;
 
-                    imagenActual++;
+                var nuevaImagen = document.createElement("img");
+                nuevaImagen.src = imagenes[imagenActual].src;
+                nuevaImagen.style.width = "100%";
+                nuevaImagen.classList.add("fade-in");
 
-                    // Restaurar la posición del scroll después de cambiar las imágenes
-                    window.scrollTo(0, scrollPosition);
+                imagenAparece.innerHTML = "";
+                imagenAparece.appendChild(nuevaImagen);
+
+                setTimeout(function() {
+                    window.scrollTo(0, scrollPos);
+                }, 0);
+
+                if (imagenes[imagenActual].src === "img/chicas-historias9.png") {
+                    nuevaImagen.useMap = "#image-map";
+                    nuevaImagen.insertAdjacentHTML("afterend", `
+                        <map name="image-map">
+                            <area target="" alt="" title="" href="#" coords="263,8,503,205" shape="rect" onclick="mostrarRayo(event)"></area>
+                            <area target="" alt="" title="" href="#" coords="440,293,35" shape="circle" onclick="reproducirRisa(event)"></area>
+                        </map>
+                    `);
+                } else if (imagenes[imagenActual].src === "img/chicasgritando.jpeg") {
+                    nuevaImagen.useMap = "#image-map-gritos";
+                    nuevaImagen.insertAdjacentHTML("afterend", `
+                        <map name="image-map-gritos">
+                            <area target="" alt="" title="" href="#" coords="256,254,765,362" shape="rect" onclick="reproducirGritos(event)"></area>
+                        </map>
+                    `);
                 }
-            });
+
+                imagenActual++;
+            }
         }
 
         function pauseAudio() {
@@ -89,7 +104,7 @@
         function restartAudio() {
             audio.currentTime = 0;
             var imagenAparece = document.getElementById("imagenAparece");
-            imagenAparece.innerHTML = ""; // Limpiar cualquier imagen anterior
+            imagenAparece.innerHTML = ""; 
             imagenActual = 0;
             playAudio();
         }
@@ -106,9 +121,99 @@
             instrucciones.style.display = "none";
             document.removeEventListener("click", hideInstructions);
         }
+
+        function reproducirRisa(event) {
+            event.preventDefault();
+            var risaAudio = document.getElementById("risaAudio");
+            risaAudio.currentTime = 0;
+            risaAudio.play();
+        }
+
+        function reproducirGritos(event) {
+            event.preventDefault();
+            var gritosAudio = document.getElementById("gritosAudio");
+            gritosAudio.currentTime = 0;
+            gritosAudio.play();
+        }
+
+        function mostrarRayo(event) {
+            event.preventDefault();
+            var rayo = document.getElementById("rayo");
+            var rayoAudio = document.getElementById("rayoAudio");
+    
+            var x = 370; 
+            var y = 122; 
+
+            rayo.style.left = x + "px";
+            rayo.style.top = y + "px";
+            rayo.style.display = "block";
+            rayoAudio.play();
+    
+            pauseAudio();
+
+            setTimeout(function() {
+                rayo.style.display = "none";
+            }, 2000);
+        }
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
